@@ -1,0 +1,833 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Ia Smart Assistant â€” CRM para negÃ³cios de serviÃ§o</title>
+<script src="./_runtime/react.js"></script>
+<script src="./_runtime/react-dom.js"></script>
+<script src="./_runtime/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07060F}
+a{color:#C9B8FF}a:hover{color:#FFFFFF}
+.btn{transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-main:hover{box-shadow:0 12px 40px rgba(123,92,255,.45)}
+.card{transition:border-color .25s ease,transform .25s ease}
+.card:hover{border-color:rgba(201,184,255,.35);transform:translateY(-4px)}
+details summary{cursor:pointer;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details[open] .plus{transform:rotate(45deg)}
+.plus{transition:transform .2s ease}
+@media (max-width:760px){.nav-links{display:none !important}.bar-text{display:none !important}.wa-label{display:none !important}}
+.pc-slot{position:absolute;left:50%;top:50%;width:560px;height:340px;margin-left:-280px;margin-top:-170px;border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .7s cubic-bezier(.22,1,.36,1),opacity .7s ease,filter .7s ease;border:1px solid rgba(164,123,255,.3);background:#0A0915;transform-origin:50% 50%}
+.pc-slot img{transition:filter .7s ease}
+.pc-title{margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;animation:pop .5s ease}
+.pc-text{margin:6px 0 0;color:#A9A3C4;font-size:15px;line-height:1.5}
+@media (max-width:760px){.pc-track{transform:scale(.5)}.pc-stage{height:300px !important}}
+.rv-track{animation:rv 48s linear infinite}
+.rv-viewport:hover .rv-track{animation-play-state:paused}
+@keyframes rv{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 10px))}}
+@media (prefers-reduced-motion:reduce){.rv-track{animation:none}.rv-viewport{overflow-x:auto}}
+.gcur{display:inline-block;width:3px;height:.85em;background:#C9B8FF;margin-left:3px;vertical-align:-0.08em;animation:gblink 1s steps(2,start) infinite}
+@keyframes gblink{to{visibility:hidden}}
+@keyframes gtowhite{from{color:#E08CF5}to{color:#FFFFFF}}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(37,211,102,.55)}100%{box-shadow:0 0 0 18px rgba(37,211,102,0)}}
+.field:focus-within{border-color:rgba(164,123,255,.7) !important}
+.field input{all:unset;flex:1;font-size:16px;color:#F4F2FF}
+.field input::placeholder{color:#8E88A8}
+</style>
+</helmet>
+<div style="font-family: Inter, system-ui, sans-serif; color: #F4F2FF; background: #07060F; min-height: 100vh; overflow-x: hidden">
+
+<!-- HERO -->
+<header ref="{{ setHero }}" style="position: relative; min-height: 700px; display: flex; flex-direction: column; overflow: hidden; background: #07060F">
+<canvas ref="{{ setCanvas }}" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block"></canvas>
+<div aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 60% 55% at 50% 48%, rgba(7,6,15,.82) 0%, rgba(7,6,15,.35) 60%, rgba(7,6,15,0) 100%), linear-gradient(180deg, rgba(7,6,15,0) 70%, #07060F 100%)"></div>
+
+<nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; width: 100%; box-sizing: border-box; padding: 16px max(24px, calc((100% - 1200px) / 2)); border-bottom: 1px solid #000; background: #0B0C12; box-shadow: 0 1px 0 #000; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; pointer-events: none">
+<a href="#topo" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #F4F2FF; pointer-events: auto">
+<img src="./assets/18916aea521fc4d6a292ab11105ed2f5.png" alt="Ia Smart Assistant â€” Atendimento com IA + CRM" style="height: 52px; width: auto; display: block">
+</a>
+<div class="nav-links" style="display: flex; gap: 32px; font-size: 15px; pointer-events: auto">
+<a href="#recursos" style="text-decoration: none; color: #CFCAE6">Recursos</a>
+<a href="#para-quem" style="text-decoration: none; color: #CFCAE6">Para quem</a>
+<a href="#planos" style="text-decoration: none; color: #CFCAE6">Planos</a>
+<a href="#faq" style="text-decoration: none; color: #CFCAE6">DÃºvidas</a>
+</div>
+<a href="#planos" class="btn" style="pointer-events: auto; text-decoration: none; color: #F4F2FF; font-weight: 600; font-size: 15px; padding: 12px 20px; border-radius: 999px; border: 1px solid rgba(201,184,255,.35); background: rgba(16,14,28,.6); backdrop-filter: blur(8px)">Quero conhecer</a>
+</nav>
+
+<div id="topo" style="position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 110px 24px 80px; pointer-events: none">
+<span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #C9B8FF; padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(201,184,255,.25); background: rgba(16,14,28,.55); backdrop-filter: blur(8px)"><span style="width: 7px; height: 7px; border-radius: 50%; background: #FF9FFC; box-shadow: 0 0 12px #FF9FFC"></span>CRM com inteligÃªncia artificial</span>
+<h1 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(42px, 6.4vw, 84px); line-height: 1.02; letter-spacing: -0.035em; margin: 28px 0 0; max-width: 980px">Seu negÃ³cio organizado.<br><span style="color: #C9B8FF">Mais tempo para olhar nos olhos do cliente.</span></h1>
+<p style="font-size: clamp(17px, 1.6vw, 20px); line-height: 1.6; color: #CFCAE6; max-width: 640px; margin: 28px 0 0">Agenda, atendimento no WhatsApp, clientes e financeiro em um sÃ³ lugar â€” com uma assistente de IA que trabalha por vocÃª 24 horas. Menos planilha, menos correria, mais tempo para o que importa.</p>
+<div style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 40px; pointer-events: auto">
+<a href="#planos" class="btn btn-main" style="text-decoration: none; color: #FFFFFF; font-weight: 600; font-size: 16px; padding: 18px 30px; border-radius: 999px; background: #6A45FF; box-shadow: 0 8px 30px rgba(106,69,255,.35)">Ver planos e condiÃ§Ãµes</a>
+<button type="button" onClick="{{ openPopup }}" class="btn" style="cursor: pointer; font-family: inherit; color: #F4F2FF; font-weight: 600; font-size: 16px; padding: 18px 30px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); background: rgba(16,14,28,.55); backdrop-filter: blur(8px)">Testar 72h grÃ¡tis</button>
+</div>
+<div style="display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; margin-top: 48px; font-size: 14px; color: #A9A3C4">
+<span style="display: flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>ImplantaÃ§Ã£o com poucos cliques</span>
+<span style="display: flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Adaptado ao seu negÃ³cio</span>
+<span style="display: flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Suporte humano em portuguÃªs</span>
+</div>
+</div>
+</header>
+
+<!-- CONTADOR -->
+<section ref="{{ setStats }}" aria-label="NÃºmeros" style="border-top: 1px solid rgba(255,255,255,.07); border-bottom: 1px solid rgba(255,255,255,.07); background: #0A0914">
+<div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))">
+<div style="padding: 32px 20px; text-align: center; border-right: 1px solid rgba(255,255,255,.07)">
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 44px; letter-spacing: -0.02em">{{ statResposta }}</p>
+<p style="margin: 6px 0 0; font-size: 14px; color: #A9A3C4">tempo de resposta da IA</p>
+</div>
+<div style="padding: 32px 20px; text-align: center; border-right: 1px solid rgba(255,255,255,.07)">
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 44px; letter-spacing: -0.02em">{{ statFaltas }}</p>
+<p style="margin: 6px 0 0; font-size: 14px; color: #A9A3C4">de faltas com confirmaÃ§Ã£o automÃ¡tica</p>
+</div>
+<div style="padding: 32px 20px; text-align: center; border-right: 1px solid rgba(255,255,255,.07)">
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 44px; letter-spacing: -0.02em; color: #C9B8FF">{{ statClientes }}</p>
+<p style="margin: 6px 0 0; font-size: 14px; color: #A9A3C4">negÃ³cios atendidos</p>
+</div>
+<div style="padding: 32px 20px; text-align: center">
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 44px; letter-spacing: -0.02em">24/7</p>
+<p style="margin: 6px 0 0; font-size: 14px; color: #A9A3C4">atendendo sem parar</p>
+</div>
+</div>
+</section>
+
+<!-- DOR -->
+<section style="max-width: 1200px; margin: 0 auto; padding: 56px 24px 16px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #FF9FFC">VocÃª se reconhece?</span>
+<h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(32px, 3.6vw, 48px); line-height: 1.1; letter-spacing: -0.025em; margin: 0; max-width: 820px">VocÃª abriu um negÃ³cio para atender bem â€” nÃ£o para viver apagando incÃªndio.</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 36px">
+<div style="padding: 28px; border-radius: 20px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.07)">
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; margin: 0 0 10px">Mensagens sem resposta</p>
+<p style="margin: 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">O cliente chama no WhatsApp Ã  noite, ninguÃ©m responde, e ele agenda com o concorrente.</p>
+</div>
+<div style="padding: 28px; border-radius: 20px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.07)">
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; margin: 0 0 10px">Agenda furada</p>
+<p style="margin: 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">Faltas sem aviso, horÃ¡rios duplicados e aquele caderno que ninguÃ©m mais entende.</p>
+</div>
+<div style="padding: 28px; border-radius: 20px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.07)">
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; margin: 0 0 10px">Dinheiro no escuro</p>
+<p style="margin: 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">VocÃª trabalha o mÃªs inteiro e no fim nÃ£o sabe ao certo quanto entrou, quanto saiu e quem deve.</p>
+</div>
+</div>
+</section>
+
+<!-- RECURSOS: PRISM CAROUSEL COM TELAS REAIS -->
+<section id="recursos" style="max-width: 1200px; margin: 0 auto; padding: 48px 24px 24px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #C9B8FF">A soluÃ§Ã£o</span>
+<h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(32px, 3.6vw, 48px); line-height: 1.1; letter-spacing: -0.025em; margin: 0; max-width: 820px">JÃ¡ imaginou nÃ£o precisar de vÃ¡rios sistemas para gerenciar o seu negÃ³cio?</h2>
+<p style="margin: 0; color: #A9A3C4; font-size: 17px; line-height: 1.6; max-width: 620px">Role sobre as telas ou deixe passar sozinho: cada parte do Ia Smart Assistant aparece em destaque no centro.</p>
+</div>
+<div ref="{{ setStage }}" class="pc-stage" onPointerDown="{{ dragStart }}" style="position: relative; height: 420px; margin-top: 32px; overflow: hidden; touch-action: pan-y; user-select: none">
+<div class="pc-track" style="position: absolute; left: 50%; top: 50%; width: 0; height: 0">
+<sc-for list="{{ slides }}" as="sl" hint-placeholder-count="9">
+<div class="pc-slot" style="{{ sl.outer }}" onClick="{{ sl.go }}" aria-hidden="{{ sl.hidden }}">
+<img src="{{ sl.src }}" alt="{{ sl.alt }}" draggable="false" style="width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; pointer-events: none">
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; min-height: 84px; margin-top: 8px" aria-live="polite">
+<p class="pc-title">{{ capTitle }}</p>
+<p class="pc-text">{{ capText }}</p>
+</div>
+<div style="display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 8px; flex-wrap: wrap">
+<button type="button" onClick="{{ prev }}" aria-label="Tela anterior" class="btn" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.16); background: #0E0C1A; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+<sc-for list="{{ dots }}" as="d" hint-placeholder-count="9"><button type="button" onClick="{{ d.go }}" aria-label="{{ d.label }}" style="{{ d.style }}"></button></sc-for>
+<button type="button" onClick="{{ next }}" aria-label="PrÃ³xima tela" class="btn" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.16); background: #0E0C1A; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+</div>
+</section>
+
+<!-- PARA QUEM -->
+<section id="para-quem" style="max-width: 1200px; margin: 0 auto; padding: 24px 24px 40px; box-sizing: border-box">
+<div style="border-radius: 28px; padding: clamp(32px, 5vw, 64px); background: radial-gradient(ellipse 80% 120% at 100% 0%, rgba(123,92,255,.22) 0%, rgba(14,12,26,0) 60%), #0E0C1A; border: 1px solid rgba(255,255,255,.08); display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div style="flex: 1 1 380px; min-width: 0">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #FF9FFC">Para quem Ã©</span>
+<h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(30px, 3.2vw, 42px); line-height: 1.12; letter-spacing: -0.025em; margin: 16px 0 18px">Feito para a rotina de quem atende clientes todos os dias.</h2>
+<p style="margin: 0; color: #A9A3C4; font-size: 17px; line-height: 1.6">Cada negÃ³cio tem seu jeito. Por isso a Ia Smart Assistant Ã© configurada para a sua empresa, com os seus serviÃ§os, profissionais, horÃ¡rios e regras.</p>
+</div>
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-wrap: wrap; gap: 12px">
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">ClÃ­nicas de estÃ©tica</span>
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">ConsultÃ³rios odontolÃ³gicos</span>
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">SalÃµes e barbearias</span>
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">Studios de beleza</span>
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">Fisioterapia e saÃºde</span>
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">Pet shops e veterinÃ¡rias</span>
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">Oficinas e serviÃ§os tÃ©cnicos</span>
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">Academias e personal</span>
+<span style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(201,184,255,.22); background: rgba(7,6,15,.5); font-size: 15px">EscritÃ³rios e consultorias</span>
+</div>
+</div>
+</section>
+
+<!-- COMO COMEÃ‡A -->
+<section style="max-width: 1200px; margin: 0 auto; padding: 24px 24px 40px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #C9B8FF">Simples de comeÃ§ar</span>
+<h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(32px, 3.6vw, 48px); line-height: 1.1; letter-spacing: -0.025em; margin: 0; min-height: 2.3em" aria-label="Do contrato ao primeiro atendimento automÃ¡tico."><span aria-hidden="true" style="{{ gStyle }}">{{ gTyped }}</span><span class="gcur" aria-hidden="true"></span><span aria-hidden="true" style="color: #E08CF5">{{ gGhost }}</span><sc-if value="{{ gChip }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display: inline-block; vertical-align: middle; margin-left: 12px; font-family: Inter, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: .04em; padding: 3px 9px; border-radius: 6px; border: 1px solid rgba(255,255,255,.22); background: #1A1730; color: #CFCAE6">Tab</span></sc-if></h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 36px">
+<div style="padding: 28px; border-top: 1px solid rgba(201,184,255,.35)">
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; margin: 0; color: #7B5CFF">01</p>
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; margin: 14px 0 8px">Conversa de diagnÃ³stico</p>
+<p style="margin: 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">Entendemos sua rotina, seus serviÃ§os e onde vocÃª mais perde tempo hoje.</p>
+</div>
+<div style="padding: 28px; border-top: 1px solid rgba(201,184,255,.35)">
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; margin: 0; color: #A47BFF">02</p>
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; margin: 14px 0 8px">ConfiguraÃ§Ã£o sob medida</p>
+<p style="margin: 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">Montamos agenda, assistente de IA e fluxos com a cara do seu negÃ³cio.</p>
+</div>
+<div style="padding: 28px; border-top: 1px solid rgba(201,184,255,.35)">
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; margin: 0; color: #E08CF5">03</p>
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; margin: 14px 0 8px">VocÃª no controle</p>
+<p style="margin: 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">Treinamos sua equipe e acompanhamos de perto as primeiras semanas.</p>
+</div>
+</div>
+</section>
+
+<!-- PROVA SOCIAL GOOGLE -->
+<section id="avaliacoes" style="max-width: 1200px; margin: 0 auto; padding: 24px 24px 40px; box-sizing: border-box">
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; justify-content: space-between">
+<div>
+<span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #FF9FFC">Quem usa, recomenda</span>
+<h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(30px, 3.2vw, 42px); line-height: 1.12; letter-spacing: -0.025em; margin: 14px 0 0">O que nossos clientes dizem no Google</h2>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-radius: 16px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.08)">
+<svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"></path><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"></path><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"></path><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"></path></svg>
+<div>
+<p style="margin: 0; display: flex; align-items: center; gap: 8px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700">[4,9]</span><span style="color: #FBBC04; font-size: 18px; letter-spacing: 2px" aria-label="5 estrelas">â˜…â˜…â˜…â˜…â˜…</span></p>
+<p style="margin: 2px 0 0; font-size: 13px; color: #A9A3C4">Baseado em [XX] avaliaÃ§Ãµes no Google</p>
+</div>
+</div>
+</div>
+<div class="rv-viewport" style="margin-top: 32px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)">
+<div class="rv-track" style="display: flex; gap: 20px; width: max-content; padding: 8px 0">
+<sc-for list="{{ reviewsLoop }}" as="r" hint-placeholder-count="4">
+<div class="card" style="width: 340px; flex: none; box-sizing: border-box; padding: 26px; border-radius: 20px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.08); display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 12px">
+<div style="width: 42px; height: 42px; border-radius: 50%; background: {{ r.color }}; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 17px; color: #FFFFFF; flex: none">{{ r.initial }}</div>
+<div style="flex: 1; min-width: 0">
+<p style="margin: 0; font-weight: 600; font-size: 15px">{{ r.name }}</p>
+<p style="margin: 2px 0 0; font-size: 13px; color: #A9A3C4">{{ r.business }}</p>
+</div>
+<svg width="20" height="20" viewBox="0 0 48 48" aria-label="Google" role="img"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"></path><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"></path><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"></path><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"></path></svg>
+</div>
+<p style="margin: 0; display: flex; align-items: center; gap: 8px"><span style="color: #FBBC04; letter-spacing: 2px" aria-label="5 estrelas">â˜…â˜…â˜…â˜…â˜…</span><span style="font-size: 13px; color: #8E88A8">{{ r.when }}</span></p>
+<p style="margin: 0; color: #DAD5F0; line-height: 1.6; font-size: 15px">{{ r.text }}</p>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; justify-content: center; margin-top: 24px">
+<a href="[LINK-DO-SEU-PERFIL-NO-GOOGLE]" style="font-size: 15px; font-weight: 600; text-decoration: none">Ver todas as avaliaÃ§Ãµes no Google â†’</a>
+</div>
+</section>
+
+<!-- PLANOS -->
+<section id="planos" style="max-width: 1200px; margin: 0 auto; padding: 48px 24px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #FF9FFC">Planos e condiÃ§Ãµes</span>
+<h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(32px, 3.6vw, 48px); line-height: 1.1; letter-spacing: -0.025em; margin: 0; max-width: 780px">Um investimento que se paga com os horÃ¡rios que vocÃª deixa de perder.</h2>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 36px; align-items: stretch">
+
+<div style="padding: 36px 32px; border-radius: 24px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.08); display: flex; flex-direction: column; gap: 22px">
+<div>
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; margin: 0">Essencial</p>
+<p style="margin: 8px 0 0; color: #A9A3C4; font-size: 15px; line-height: 1.5">Para quem estÃ¡ organizando a casa.</p>
+</div>
+<p style="margin: 0; display: flex; align-items: baseline; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.02em">R$ 97,90</span><span style="color: #A9A3C4; font-size: 15px">/mÃªs</span></p>
+<div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #DAD5F0">
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>Agenda inteligente</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>CRM de clientes</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>Lembretes automÃ¡ticos</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>AtÃ© 2 profissionais</span>
+</div>
+<a href="#contato" class="btn" style="margin-top: auto; text-align: center; text-decoration: none; color: #F4F2FF; font-weight: 600; padding: 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18)">ComeÃ§ar no Essencial</a>
+</div>
+
+<div style="position: relative; padding: 36px 32px; border-radius: 24px; background: linear-gradient(180deg, #1C1640 0%, #110E24 100%); border: 1px solid rgba(164,123,255,.55); box-shadow: 0 30px 80px rgba(106,69,255,.22); display: flex; flex-direction: column; gap: 22px">
+<span style="position: absolute; top: -14px; left: 32px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 6px 14px; border-radius: 999px; background: #6A45FF; color: #FFFFFF">Mais escolhido</span>
+<div>
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; margin: 0">Smart</p>
+<p style="margin: 8px 0 0; color: #CFCAE6; font-size: 15px; line-height: 1.5">A IA atendendo por vocÃª, todos os dias.</p>
+</div>
+<p style="margin: 0; display: flex; align-items: baseline; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.02em">R$ 167,90</span><span style="color: #CFCAE6; font-size: 15px">/mÃªs</span></p>
+<div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #E9E5FA">
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9FFC" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>Tudo do Essencial</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9FFC" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>Atendente de IA no WhatsApp 24h</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9FFC" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>Financeiro e comissÃµes</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9FFC" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>RelatÃ³rios de desempenho</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF9FFC" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>AtÃ© 5 profissionais</span>
+</div>
+<a href="#contato" class="btn btn-main" style="margin-top: auto; text-align: center; text-decoration: none; color: #FFFFFF; font-weight: 600; padding: 16px; border-radius: 999px; background: #6A45FF">Quero o Smart</a>
+</div>
+
+<div style="padding: 36px 32px; border-radius: 24px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.08); display: flex; flex-direction: column; gap: 22px">
+<div>
+<p style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; margin: 0">Premium</p>
+<p style="margin: 8px 0 0; color: #A9A3C4; font-size: 15px; line-height: 1.5">Para operaÃ§Ãµes com vÃ¡rias unidades.</p>
+</div>
+<p style="margin: 0; display: flex; align-items: baseline; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; letter-spacing: -0.02em">R$ 297,00</span><span style="color: #A9A3C4; font-size: 15px">/mÃªs</span></p>
+<div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #DAD5F0">
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>Tudo do Smart</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>MÃºltiplas unidades</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>AutomaÃ§Ãµes personalizadas</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>Gerente de sucesso dedicado</span>
+<span style="display: flex; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M20 6 9 17l-5-5"></path></svg>Profissionais ilimitados</span>
+</div>
+<a href="#contato" class="btn" style="margin-top: auto; text-align: center; text-decoration: none; color: #F4F2FF; font-weight: 600; padding: 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18)">Falar com especialista</a>
+</div>
+
+</div>
+
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="max-width: 860px; margin: 0 auto; padding: 24px 24px 40px; box-sizing: border-box">
+<h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: clamp(30px, 3.2vw, 42px); letter-spacing: -0.025em; margin: 0 0 32px; text-align: center">DÃºvidas frequentes</h2>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<details style="border-radius: 16px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.07); padding: 22px 26px">
+<summary style="display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 17px; font-weight: 600">Preciso entender de tecnologia?<span class="plus" style="font-size: 24px; color: #C9B8FF; line-height: 1">+</span></summary>
+<p style="margin: 14px 0 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">NÃ£o. ConfiguraÃ§Ã£o feita por vocÃª com poucos cliques.</p>
+</details>
+<details style="border-radius: 16px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.07); padding: 22px 26px">
+<summary style="display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 17px; font-weight: 600">A IA responde do jeito da minha empresa?<span class="plus" style="font-size: 24px; color: #C9B8FF; line-height: 1">+</span></summary>
+<p style="margin: 14px 0 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">Sim. Ela Ã© treinada com seus serviÃ§os, preÃ§os, horÃ¡rios e tom de voz â€” e passa a conversa para um humano sempre que for preciso.</p>
+</details>
+<details style="border-radius: 16px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.07); padding: 22px 26px">
+<summary style="display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 17px; font-weight: 600">Funciona para o meu tipo de negÃ³cio?<span class="plus" style="font-size: 24px; color: #C9B8FF; line-height: 1">+</span></summary>
+<p style="margin: 14px 0 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">Se vocÃª atende pessoas com hora marcada ou por ordem de chegada, sim. A plataforma Ã© ajustada Ã s regras do seu atendimento.</p>
+</details>
+<details style="border-radius: 16px; background: #0E0C1A; border: 1px solid rgba(255,255,255,.07); padding: 22px 26px">
+<summary style="display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 17px; font-weight: 600">Em quanto tempo comeÃ§o a usar?<span class="plus" style="font-size: 24px; color: #C9B8FF; line-height: 1">+</span></summary>
+<p style="margin: 14px 0 0; color: #A9A3C4; line-height: 1.6; font-size: 15px">Em mÃ©dia [X] dias Ãºteis apÃ³s a conversa de diagnÃ³stico, jÃ¡ com a agenda e a assistente funcionando.</p>
+</details>
+</div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="contato" style="max-width: 1200px; margin: 0 auto; padding: 24px 24px 64px; box-sizing: border-box">
+<div style="border-radius: 32px; padding: clamp(40px, 6vw, 80px) 24px; text-align: center; background: radial-gradient(ellipse 70% 90% at 50% 0%, rgba(123,92,255,.35) 0%, rgba(14,12,26,0) 70%), #0E0C1A; border: 1px solid rgba(164,123,255,.3); display: flex; flex-direction: column; align-items: center; gap: 22px">
+<h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(32px, 4vw, 56px); line-height: 1.05; letter-spacing: -0.03em; margin: 0; max-width: 820px">Imagine ter um sistema adequado ao que sua empresa realmente precisa.</h2>
+<p style="margin: 0; color: #CFCAE6; font-size: 18px; line-height: 1.6; max-width: 560px">Fale com a gente e veja a Ia Smart Assistant funcionando com os dados do seu negÃ³cio.</p>
+<a href="https://wa.me/55[SEU-NUMERO]" class="btn btn-main" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-weight: 600; font-size: 17px; padding: 20px 34px; border-radius: 999px; background: #6A45FF">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path></svg>Agendar demonstraÃ§Ã£o no WhatsApp</a>
+</div>
+</section>
+
+<footer style="border-top: 1px solid rgba(255,255,255,.07)">
+<div style="max-width: 1200px; margin: 0 auto; padding: 32px 24px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; font-size: 14px; color: #A9A3C4">
+<span>Â© {{ year }} Ia Smart Assistant. Todos os direitos reservados.</span>
+<span>Tecnologia que simplifica o seu dia.</span>
+</div>
+<div style="height: 76px"></div>
+</footer>
+
+<!-- BARRA DE OFERTA COM CONTADOR -->
+<div style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: rgba(10,9,20,.92); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,.08)">
+<div style="max-width: 1200px; margin: 0 auto; padding: 12px 24px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; align-items: center; gap: 14px; min-width: 0">
+<span style="display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #FF9FFC; padding: 6px 12px; border-radius: 10px; background: rgba(255,159,252,.1); border: 1px solid rgba(255,159,252,.25); font-variant-numeric: tabular-nums"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9FFC" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2M9 2h6"></path></svg>{{ countdown }}</span>
+<span class="bar-text" style="font-size: 14px; color: #CFCAE6">Oferta de hoje: plano anual com [X]% OFF + 72h de teste grÃ¡tis</span>
+</div>
+<a href="#planos" class="btn btn-main" style="flex: none; text-decoration: none; color: #FFFFFF; font-weight: 600; font-size: 15px; padding: 12px 22px; border-radius: 999px; background: #6A45FF">Garantir oferta â†’</a>
+</div>
+</div>
+
+<!-- WHATSAPP FLUTUANTE -->
+<div style="position: fixed; right: 24px; bottom: 92px; z-index: 45; display: flex; align-items: center; gap: 12px">
+<span class="wa-label" style="padding: 10px 16px; border-radius: 12px; background: #FFFFFF; color: #111018; font-size: 14px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,.35)">Fale conosco</span>
+<a href="https://wa.me/55[SEU-NUMERO]?text=Ol%C3%A1!%20Quero%20conhecer%20o%20Ia%20Smart%20Assistant" target="_blank" rel="noopener" aria-label="Falar no WhatsApp" style="width: 60px; height: 60px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; animation: ring 2s infinite; box-shadow: 0 10px 30px rgba(37,211,102,.4)">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"></path><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"></path></svg>
+</a>
+</div>
+
+<!-- POPUP 72 HORAS -->
+<sc-if value="{{ popupOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position: fixed; inset: 0; z-index: 60; background: rgba(4,3,10,.72); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; overflow-y: auto">
+<div role="dialog" aria-modal="true" aria-labelledby="popup-title" style="position: relative; width: 100%; max-width: 480px; border-radius: 28px; padding: 40px 36px 32px; box-sizing: border-box; background: radial-gradient(ellipse 90% 60% at 50% 0%, rgba(123,92,255,.28) 0%, rgba(14,12,26,0) 70%), #0E0C1A; border: 1px solid rgba(164,123,255,.35); box-shadow: 0 40px 120px rgba(0,0,0,.6); text-align: center; animation: pop .35s ease">
+<button type="button" onClick="{{ closePopup }}" aria-label="Fechar" style="position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CFCAE6" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+<sc-if value="{{ formSent }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 12px 0">
+<div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(123,92,255,.18); border: 1px solid rgba(164,123,255,.5); display: flex; align-items: center; justify-content: center"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C9B8FF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></div>
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700">Seu teste estÃ¡ reservado!</h2>
+<p style="margin: 0; color: #CFCAE6; line-height: 1.6; font-size: 15px">Nossa equipe vai chamar vocÃª no WhatsApp para liberar o acesso. Quer adiantar? Fale com a gente agora.</p>
+<a href="https://wa.me/55[SEU-NUMERO]?text=Quero%20liberar%20meu%20teste%20de%2072%20horas" target="_blank" rel="noopener" class="btn" style="margin-top: 6px; text-decoration: none; color: #FFFFFF; font-weight: 600; padding: 16px 28px; border-radius: 999px; background: #25D366">Abrir WhatsApp</a>
+</div>
+</sc-if>
+<sc-if value="{{ formOpen }}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #FF9FFC"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9FFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"></rect><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"></path></svg>Teste grÃ¡tis de 72 horas</p>
+<h2 id="popup-title" style="margin: 14px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; line-height: 1.2; font-weight: 700">Antes de sair, experimente o sistema</h2>
+<p style="margin: 8px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 72px; line-height: 1; font-weight: 700; letter-spacing: -0.03em; color: #C9B8FF">72 HORAS</p>
+<p style="margin: 8px 0 0; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #C9B8FF">Acesso total por 72 horas</p>
+<p style="margin: 16px 0 0; color: #CFCAE6; line-height: 1.6; font-size: 15px">ConheÃ§a todas as ferramentas da Ia Smart Assistant por <strong style="color: #FFFFFF">72 horas</strong> sem pagar nada. Se gostar, continua. Se nÃ£o quiser, encerra.</p>
+<form onSubmit="{{ submitForm }}" style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px; text-align: left">
+<label class="field" style="display: flex; align-items: center; gap: 12px; padding: 0 18px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.12)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A9A3C4" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Seu nome</span>
+<input type="text" name="nome" required="" placeholder="Seu nome" autocomplete="name" onInput="{{ onName }}">
+</label>
+<label class="field" style="display: flex; align-items: center; gap: 12px; padding: 0 18px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.12)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A9A3C4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path></svg>
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Seu WhatsApp</span>
+<input type="tel" name="whatsapp" required="" placeholder="Seu WhatsApp" autocomplete="tel" onInput="{{ onPhone }}">
+</label>
+<label class="field" style="display: flex; align-items: center; gap: 12px; padding: 0 18px; height: 54px; border-radius: 14px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.12)">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A9A3C4" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"></rect><path d="m2 7 10 6 10-6"></path></svg>
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Seu e-mail (opcional)</span>
+<input type="email" name="email" placeholder="Seu e-mail (opcional)" autocomplete="email">
+</label>
+<button type="submit" class="btn btn-main" style="margin-top: 4px; height: 58px; border: none; border-radius: 16px; background: #6A45FF; color: #FFFFFF; font-family: inherit; font-weight: 600; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"></rect><path d="M12 8v13M19 12v9H5v-9"></path></svg>Liberar meu teste de 72 horas</button>
+</form>
+<p style="margin: 14px 0 0; font-size: 13px; color: #8E88A8">Sem cartÃ£o de crÃ©dito. Sem compromisso.</p>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"waves":{"editor":"boolean","default":true,"section":"Fundo"},"clientes":{"editor":"int","default":1200,"min":0,"section":"Contador"},"faltas":{"editor":"int","default":84,"min":0,"max":100,"unit":"%","section":"Contador"},"resposta":{"editor":"int","default":1,"min":1,"unit":"min","section":"Contador"},"$preview":{"width":1440,"height":6100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (!this._refs) {
+      this._refs = true;
+      this.state = Object.assign({ active: 0, popup: false, sent: false, progress: 0, countdown: '00:00:00' }, this.state || {});
+      this.form = { nome: '', whatsapp: '' };
+      this.setHero = (el) => { this.heroEl = el; };
+      this.setCanvas = (el) => { this.canvasEl = el; };
+      this.setStats = (el) => { this.statsEl = el; };
+      this.setStage = (el) => { this.stageEl = el; };
+      this.car = { hold: 0, wheelAt: 0 };
+      this.ghostFull = 'Do contrato ao primeiro atendimento automÃ¡tico.';
+      this.slides = [
+      { src: './assets/e187e6ccbf4d3f5366a6919a4397deae.jpg', alt: 'Painel do negÃ³cio', title: 'Painel do negÃ³cio', text: 'Faturamento, fluxo de caixa e status dos agendamentos em um sÃ³ lugar.' },
+      { src: './assets/d2fb3391bf1ebb5f033d1317f8e53f3a.jpg', alt: 'Agenda inteligente', title: 'Agenda inteligente', text: 'HorÃ¡rios por profissional e por sala, com visÃ£o do dia, da semana e do mÃªs.' },
+      { src: './assets/3466bf32c481543d553ff6256edf9c12.jpg', alt: 'Aniversariantes e disparos', title: 'Aniversariantes e disparos', text: 'ParabÃ©ns automÃ¡ticos no horÃ¡rio que vocÃª define, sem precisar lembrar.' },
+      { src: './assets/88fa6e75354553d5f6e5593055df0783.jpg', alt: 'ConfirmaÃ§Ãµes automÃ¡ticas', title: 'ConfirmaÃ§Ãµes automÃ¡ticas', text: 'Confirma a presenÃ§a um dia antes e envia lembrete no dia do atendimento.' },
+      { src: './assets/695999c908e33dea51acbf2ab7ef0850.jpg', alt: 'Atendente de IA no WhatsApp', title: 'Atendente de IA no WhatsApp', text: 'Responde, apresenta horÃ¡rios e agenda sozinha, com transferÃªncia para a equipe.' },
+      { src: './assets/5b7add43369cadb112d09db318cea4c8.jpg', alt: 'Financeiro sem planilha', title: 'Financeiro sem planilha', text: 'Entradas, saÃ­das, taxas de cartÃ£o e despesas fixas organizadas automaticamente.' },
+      { src: './assets/13c3bbe29bb4074d365a1112e3a6800b.jpg', alt: 'Cadastro completo de clientes', title: 'Cadastro completo de clientes', text: 'HistÃ³rico, ranking de fidelidade e Ãºltima visita de cada cliente.' },
+      { src: './assets/63cafea8902636262d0c2722546bdd4c.jpg', alt: 'Procedimentos e valores', title: 'Procedimentos e valores', text: 'ServiÃ§os, duraÃ§Ã£o, profissional responsÃ¡vel, formas de pagamento e pacotes.' },
+      { src: './assets/bf5500788aa2c6c28a8bdefac86a936d.jpg', alt: 'Equipe e especialidades', title: 'Equipe e especialidades', text: 'Cada profissional com a sua cor, agenda e serviÃ§os vinculados.' }
+      ];
+      this.goTo = this.slides.map((_, i) => () => this.go(i));
+      this.go = (i) => { const n = this.slides.length; this.car.hold = performance.now() + 5000; this.setState({ active: ((i % n) + n) % n }); };
+      this.prev = () => this.go((this.state.active || 0) - 1);
+      this.next = () => this.go((this.state.active || 0) + 1);
+            this.dragStart = (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        const x0 = e.clientX;
+        const up = (ev) => {
+          window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up);
+          const dx = (ev.clientX || x0) - x0;
+          if (Math.abs(dx) > 40) dx < 0 ? this.next() : this.prev();
+        };
+        window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
+      };
+      this.openPopup = () => this.showPopup(true);
+      this.closePopup = () => this.setState({ popup: false });
+      this.onName = (e) => { this.form.nome = e.target.value; };
+      this.onPhone = (e) => { this.form.whatsapp = e.target.value; };
+      this.submitForm = (e) => {
+        e.preventDefault();
+        // IntegraÃ§Ã£o: envie this.form para o seu webhook (ex.: n8n) aqui.
+        this.setState({ sent: true });
+      };
+    }
+    const s = this.state || {};
+    const p = s.progress || 0;
+    const ease = 1 - Math.pow(1 - p, 3);
+    const clientes = this.props.clientes ?? 1200;
+    const faltas = this.props.faltas ?? 84;
+    const resposta = this.props.resposta ?? 1;
+    const reviews = [
+      { initial: 'A', color: '#6A45FF', name: '[Nome do cliente]', business: '[NegÃ³cio Â· cidade]', when: '[hÃ¡ 2 semanas]', text: '[Cole aqui um comentÃ¡rio real deixado no Google pelo cliente.]' },
+      { initial: 'B', color: '#C04FB8', name: '[Nome do cliente]', business: '[NegÃ³cio Â· cidade]', when: '[hÃ¡ 1 mÃªs]', text: '[Cole aqui um comentÃ¡rio real deixado no Google pelo cliente.]' },
+      { initial: 'C', color: '#3B6FE0', name: '[Nome do cliente]', business: '[NegÃ³cio Â· cidade]', when: '[hÃ¡ 2 meses]', text: '[Cole aqui um comentÃ¡rio real deixado no Google pelo cliente.]' },
+      { initial: 'D', color: '#2E9E6A', name: '[Nome do cliente]', business: '[NegÃ³cio Â· cidade]', when: '[hÃ¡ 3 meses]', text: '[Cole aqui um comentÃ¡rio real deixado no Google pelo cliente.]' },
+      { initial: 'E', color: '#D9822B', name: '[Nome do cliente]', business: '[NegÃ³cio Â· cidade]', when: '[hÃ¡ 3 meses]', text: '[Cole aqui um comentÃ¡rio real deixado no Google pelo cliente.]' },
+      { initial: 'F', color: '#8A4FFF', name: '[Nome do cliente]', business: '[NegÃ³cio Â· cidade]', when: '[hÃ¡ 4 meses]', text: '[Cole aqui um comentÃ¡rio real deixado no Google pelo cliente.]' }
+    ];
+    const reviewsLoop = reviews.concat(reviews);
+    const gl = s.gLen == null ? 0 : s.gLen;
+    const gFull = this.ghostFull;
+    const gTyped = gFull.slice(0, gl);
+    const gGhost = s.gGhost ? gFull.slice(gl) : '';
+    const gStyle = s.gAcc ? 'animation: gtowhite 1.2s ease forwards' : '';
+    return {
+      setHero: this.setHero, setCanvas: this.setCanvas, setStats: this.setStats, setStage: this.setStage, prev: this.prev, next: this.next, dragStart: this.dragStart,
+      ...this.coverflow(s.active || 0),
+      year: new Date().getFullYear(),
+      statClientes: '+' + Math.round(clientes * ease).toLocaleString('pt-BR'),
+      statFaltas: '-' + Math.round(faltas * ease) + '%',
+      statResposta: Math.max(1, Math.round(resposta * ease)) + ' min',
+      reviews, reviewsLoop, gTyped, gGhost, gStyle, gChip: !!s.gGhost,
+      countdown: s.countdown || '00:00:00',
+      popupOpen: !!s.popup, formSent: !!s.sent, formOpen: !s.sent,
+      openPopup: this.openPopup, closePopup: this.closePopup,
+      onName: this.onName, onPhone: this.onPhone, submitForm: this.submitForm
+    };
+  }
+  coverflow(active) {
+    const N = this.slides.length;
+    // posiÃ§Ã£o (px do centro), escala e opacidade por distÃ¢ncia ao centro
+    const POS = { 0: [0, 1, 1], 1: [470, 0.6, 1], 2: [790, 0.44, 0.7], 3: [1010, 0.32, 0.35] };
+    const items = this.slides.map((sl, i) => {
+      let d = i - active; if (d > N / 2) d -= N; if (d < -N / 2) d += N;
+      const ad = Math.abs(d);
+      const cfg = POS[Math.min(ad, 3)];
+      const x = (d < 0 ? -1 : 1) * cfg[0] * (ad === 0 ? 0 : 1);
+      const hidden = ad > 3;
+      const sc = ad > 3 ? 0 : cfg[1];
+      return Object.assign({}, sl, {
+        go: this.goTo[i],
+        hidden: hidden ? 'true' : 'false',
+        outer: 'transform:translateX(' + x + 'px) scale(' + sc + ');opacity:' + (hidden ? 0 : cfg[2]) + ';z-index:' + (10 - ad) + ';pointer-events:' + (hidden ? 'none' : 'auto') + ';' + (ad === 0 ? 'box-shadow:0 30px 80px rgba(106,69,255,.38);border-color:rgba(164,123,255,.65)' : '') + ';filter:' + (ad === 0 ? 'none' : 'grayscale(1) brightness(.7)')
+      });
+    });
+    return {
+      slides: items,
+      capTitle: this.slides[active].title,
+      capText: this.slides[active].text,
+      dots: this.goTo.map((go, i) => ({ go, label: 'Ir para a tela ' + (i + 1), style: 'width:' + (i === active ? 28 : 8) + 'px;height:8px;padding:0;border:none;border-radius:99px;cursor:pointer;transition:width .4s ease,background .4s ease;background:' + (i === active ? '#C9B8FF' : 'rgba(255,255,255,.22)') }))
+    };
+  }
+  runGhost() {
+    const FULL = this.ghostFull;
+    const PRE = 'Do contrato'.length;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) { this.setState({ gLen: FULL.length, gGhost: false }); return; }
+    let len = 0, cur = FULL.length;
+    const typeStep = () => {
+      if (len < PRE) { len++; this.setState({ gLen: len, gGhost: true, gAcc: false }); this._gt = setTimeout(typeStep, 75); }
+      else this._gt = setTimeout(accept, 1400);
+    };
+    const accept = () => { cur = FULL.length; this.setState({ gLen: FULL.length, gGhost: false, gAcc: true }); this._gt = setTimeout(erase, 2600); };
+    const erase = () => {
+      cur--;
+      this.setState({ gLen: Math.max(0, cur), gGhost: false, gAcc: false });
+      if (cur > 0) this._gt = setTimeout(erase, 22);
+      else { len = 0; this._gt = setTimeout(typeStep, 700); }
+    };
+    this._gt = setTimeout(typeStep, 800);
+  }
+  runCarousel() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Passa sozinho a cada 3,2s quando ninguÃ©m estÃ¡ interagindo
+    this._auto = setInterval(() => {
+      if (reduced || performance.now() < this.car.hold || document.visibilityState === 'hidden') return;
+      this.setState({ active: ((this.state.active || 0) + 1) % this.slides.length });
+    }, 3200);
+    // Scroll do mouse/trackpad sobre as telas troca a tela do centro
+    const attach = () => {
+      if (!this.stageEl) { this._t3 = setTimeout(attach, 60); return; }
+      this._wheel = (e) => {
+        const dv = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        if (Math.abs(dv) < 4) return;
+        e.preventDefault();
+        const now = performance.now();
+        if (now - this.car.wheelAt < 550) return;
+        this.car.wheelAt = now;
+        dv > 0 ? this.next() : this.prev();
+      };
+      this.stageEl.addEventListener('wheel', this._wheel, { passive: false });
+    };
+    attach();
+  }
+  showPopup(force) {
+    if (!force) {
+      try { if (sessionStorage.getItem('isa_popup72')) return; sessionStorage.setItem('isa_popup72', '1'); } catch (e) {}
+      if (this._shown) return;
+    }
+    this._shown = true;
+    this.setState({ popup: true });
+  }
+  componentDidMount() {
+    let tries = 0;
+    const go = () => {
+      if (this.canvasEl && this.heroEl) this.dispose = startDotField(this.heroEl, this.canvasEl, () => this.props.waves ?? true);
+      else if (tries++ < 40) this._t = setTimeout(go, 50);
+    };
+    go();
+
+    this.runCarousel();
+    this.runGhost();
+
+    // Popup: intenÃ§Ã£o de saÃ­da (desktop) ou apÃ³s 30s (celular)
+    this._exit = (e) => { if (!e.relatedTarget && e.clientY <= 0) this.showPopup(false); };
+    document.addEventListener('mouseout', this._exit);
+    this._popupTimer = setTimeout(() => { if (window.matchMedia('(pointer: coarse)').matches) this.showPopup(false); }, 30000);
+    this._esc = (e) => { if (e.key === 'Escape' && this.state && this.state.popup) this.setState({ popup: false }); };
+    document.addEventListener('keydown', this._esc);
+
+    // Contador animado quando a faixa de nÃºmeros aparece
+    const animate = () => {
+      const t0 = performance.now();
+      const step = (now) => {
+        const p = Math.min(1, (now - t0) / 1600);
+        this.setState({ progress: p });
+        if (p < 1) this._raf = requestAnimationFrame(step);
+      };
+      this._raf = requestAnimationFrame(step);
+    };
+    const watch = () => {
+      if (!this.statsEl) { if (tries++ < 80) this._t2 = setTimeout(watch, 50); return; }
+      this._io = new IntersectionObserver((es) => {
+        if (es.some((x) => x.isIntersecting)) { this._io.disconnect(); animate(); }
+      }, { threshold: 0.4 });
+      this._io.observe(this.statsEl);
+    };
+    watch();
+
+    // Contagem regressiva atÃ© a meia-noite
+    const pad = (n) => String(n).padStart(2, '0');
+    const tick = () => {
+      const now = new Date();
+      const end = new Date(now); end.setHours(24, 0, 0, 0);
+      const d = Math.max(0, Math.floor((end - now) / 1000));
+      this.setState({ countdown: pad(Math.floor(d / 3600)) + ':' + pad(Math.floor(d % 3600 / 60)) + ':' + pad(d % 60) });
+    };
+    tick();
+    this._iv = setInterval(tick, 1000);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._t); clearTimeout(this._t2); clearTimeout(this._popupTimer);
+    clearInterval(this._iv); cancelAnimationFrame(this._raf); clearInterval(this._auto); clearTimeout(this._gt); clearTimeout(this._t3); if (this.stageEl && this._wheel) this.stageEl.removeEventListener('wheel', this._wheel);
+    if (this._io) this._io.disconnect();
+    document.removeEventListener('mouseout', this._exit);
+    document.removeEventListener('keydown', this._esc);
+    if (this.dispose) this.dispose();
+  }
+}
+
+function startDotField(container, canvas, wavesOn) {
+  const PIXEL_BUDGET = 9e6, MAX_DOTS = 120000;
+  const VERTEX = `#version 300 es
+precision highp float;
+layout(location = 0) in vec4 aDot;
+uniform vec2 uSize; uniform float uPixel; uniform float uRadius; uniform float uCell;
+uniform vec4 uLens; uniform vec2 uWarp; uniform vec3 uGlow; uniform vec3 uFrom; uniform vec3 uTo;
+uniform vec4 uGlowColor; uniform vec3 uGradient; uniform float uTime; uniform float uWave;
+uniform float uSparkle; uniform float uFocus; uniform float uBase;
+out vec2 vLocal; out float vRadius; out float vBlur; out float vHalo; out float vHaloWidth; out vec3 vColor; out float vAlpha;
+vec3 toRgb(vec3 lab) {
+  float l = lab.x + 0.3963377774 * lab.y + 0.2158037573 * lab.z;
+  float m = lab.x - 0.1055613458 * lab.y - 0.0638541728 * lab.z;
+  float s = lab.x - 0.0894841775 * lab.y - 1.291485548 * lab.z;
+  vec3 lms = vec3(l*l*l, m*m*m, s*s*s);
+  vec3 lin = clamp(vec3(4.0767416621*lms.x - 3.3077115913*lms.y + 0.2309699292*lms.z, -1.2684380046*lms.x + 2.6097574011*lms.y - 0.3413193965*lms.z, -0.0041960863*lms.x - 0.7034186147*lms.y + 1.707614701*lms.z), 0.0, 1.0);
+  return mix(lin * 12.92, 1.055 * pow(lin, vec3(1.0/2.4)) - 0.055, step(0.0031308, lin));
+}
+vec3 blend(vec3 a, vec3 b, float t) {
+  vec2 ab = mix(a.yz, b.yz, t); float chroma = mix(length(a.yz), length(b.yz), t); float len = length(ab);
+  return vec3(mix(a.x, b.x, t), len > 1e-5 ? ab * (chroma / len) : ab);
+}
+vec3 wave(vec2 p, float t) {
+  float ay = p.x*0.018 + t + 1.1*sin(p.y*0.016 - t*0.4);
+  float ax = p.y*0.021 + t*0.7 + 1.3*sin(p.x*0.013 + t*0.3);
+  float spread = cos(ay)*0.0176*cos(p.y*0.016 - t*0.4) + 0.5*cos(ax)*0.0169*cos(p.x*0.013 + t*0.3);
+  return uWave * vec3(0.5*sin(ax), sin(ay), spread);
+}
+void main() {
+  vec2 corner = vec2(float(gl_VertexID & 1), float(gl_VertexID >> 1)) * 2.0 - 1.0;
+  vec2 center = uSize * 0.5;
+  vec3 swell = wave(aDot.xy, uTime);
+  vec2 source = center + (aDot.xy - center) * mix(1.12, 1.0, uFocus) + swell.xy;
+  vec2 rel = source - uLens.xy;
+  float x = length(rel) / uLens.z; float y = clamp(1.0 - x*x, 0.0, 1.0); float w = y*y*y;
+  float k = uWarp.x * uLens.w; float grow = 1.0 + k*w; float spread = 1.0 + k*(w - 6.0*x*x*y*y);
+  float theta = uWarp.y * uLens.w * w; vec2 turn = vec2(cos(theta), sin(theta));
+  vec2 display = uLens.xy + vec2(turn.x*rel.x - turn.y*rel.y, turn.y*rel.x + turn.x*rel.y) * grow;
+  float scale = sqrt(max(grow*spread, 0.02));
+  float spark = 0.0;
+  if (uSparkle > 0.0) {
+    float phase = 0.5 + 0.5*sin(uTime*(0.55 + aDot.w*0.9) + aDot.z*6.2831853);
+    spark = pow(phase, 48.0) * step(0.72, fract(aDot.z*7.31 + aDot.w*3.17)) * uSparkle;
+  }
+  float pool = 0.0;
+  if (uGlow.x > 0.0) {
+    float g = length(display - uLens.xy) / uGlow.x; float q = clamp(1.0 - g*g, 0.0, 1.0);
+    pool = q*q*uGlow.y*uLens.w;
+  }
+  float radius = uRadius * (1.0 + 0.7*spark);
+  float device = radius * scale * uPixel; float fade = 1.0;
+  if (device < 0.75) { fade = device*device/0.5625; radius = 0.75/(scale*uPixel); }
+  float blur = (1.0 - uFocus) * uCell * 0.42;
+  float energy = pow(radius/(radius + blur), 1.15);
+  float halo = pool * uGlow.z; float haloWidth = 2.0 + radius*1.5;
+  float pad = radius + blur*1.2 + 1.5/(scale*uPixel) + (halo > 0.0 ? haloWidth*2.5 : 0.0);
+  float t = clamp(dot(aDot.xy - center, uGradient.xy)/uGradient.z + 0.5, 0.0, 1.0);
+  vec3 tone = blend(uFrom, uTo, t);
+  vec3 deep = vec3(tone.x*0.72, tone.yz*1.3);
+  vec3 base = toRgb(tone); vec3 lit = toRgb(mix(deep, uGlowColor.xyz, uGlowColor.w));
+  vec3 color = mix(base, lit, clamp(pool, 0.0, 1.0)*0.8);
+  color = mix(color, vec3(1.0), spark*0.55);
+  vLocal = corner*pad; vRadius = radius + blur; vBlur = blur*0.7; vHalo = halo; vHaloWidth = haloWidth; vColor = color;
+  float shade = clamp(1.0 - swell.z*2.5, 0.4, 1.6);
+  vAlpha = mix(min(uBase*shade, 1.0), 1.0, clamp(max(pool, spark), 0.0, 1.0)) * fade * energy * smoothstep(0.0, 0.25, uFocus + 0.08);
+  vec2 point = display + corner*pad*scale;
+  gl_Position = vec4(point.x/uSize.x*2.0 - 1.0, 1.0 - point.y/uSize.y*2.0, 0.0, 1.0);
+}`;
+  const FRAGMENT = `#version 300 es
+precision highp float;
+uniform float uOpacity;
+in vec2 vLocal; in float vRadius; in float vBlur; in float vHalo; in float vHaloWidth; in vec3 vColor; in float vAlpha;
+out vec4 fragColor;
+void main() {
+  float dist = length(vLocal); float d = dist - vRadius;
+  float edge = max(fwidth(dist), 1e-4) + vBlur;
+  float cover = 1.0 - smoothstep(-0.5*edge, 0.5*edge, d);
+  float glow = vHalo * exp(-max(d, 0.0)/vHaloWidth) * 0.5;
+  float alpha = min(cover + glow, 1.0) * vAlpha * uOpacity;
+  if (alpha < 0.002) discard;
+  fragColor = vec4(vColor*alpha, alpha);
+}`;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const toLinear = c => (c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+  const hexRgb = h => [0, 2, 4].map(i => parseInt(h.slice(i + 1, i + 3), 16) / 255);
+  const toOklab = color => {
+    const [r, g, b] = color.map(toLinear);
+    const l = Math.cbrt(0.4122214708*r + 0.5363325363*g + 0.0514459929*b);
+    const m = Math.cbrt(0.2119034982*r + 0.6806995451*g + 0.1073969566*b);
+    const s = Math.cbrt(0.0883024619*r + 0.2817188376*g + 0.6299787005*b);
+    return [0.2104542553*l + 0.793617785*m - 0.0040720468*s, 1.9779984951*l - 2.428592205*m + 0.4505937099*s, 0.0259040371*l + 0.7827717662*m - 0.808675766*s];
+  };
+  const hash = (a, b, c) => {
+    let h = (Math.imul(a, 374761393) + Math.imul(b, 668265263) + Math.imul(c, 1274126177)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177); h ^= h >>> 16;
+    return (h >>> 0) / 4294967296;
+  };
+  const lensReach = (radius, strength, twist) => {
+    let peak = 0;
+    for (let i = 1; i < 48; i++) {
+      const x = i / 48, w = (1 - x*x) ** 3, sigma = x * radius, grow = 1 + strength*w, theta = twist*w;
+      peak = Math.max(peak, Math.hypot(sigma*(grow*Math.cos(theta) - 1), sigma*grow*Math.sin(theta)));
+    }
+    return peak;
+  };
+  const buildDots = (width, height, step, margin) => {
+    const cx = width / 2, cy = height / 2, out = [];
+    const cols = Math.ceil((width/2 + margin) / step) + 1, rows = Math.ceil((height/2 + margin) / step) + 1;
+    for (let row = -rows; row <= rows; row++) for (let col = -cols; col <= cols; col++) {
+      const x = cx + col*step, y = cy + row*step;
+      if (x >= -margin && x <= width + margin && y >= -margin && y <= height + margin) out.push(x, y, hash(col, row, 3), hash(col, row, 4));
+    }
+    return new Float32Array(out);
+  };
+
+  const gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' });
+  if (!gl) return () => {};
+  const compile = (type, src) => { const sh = gl.createShader(type); gl.shaderSource(sh, src); gl.compileShader(sh); if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) { console.error(gl.getShaderInfoLog(sh)); return null; } return sh; };
+  const vs = compile(gl.VERTEX_SHADER, VERTEX), fs = compile(gl.FRAGMENT_SHADER, FRAGMENT);
+  if (!vs || !fs) return () => {};
+  const program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { console.error(gl.getProgramInfoLog(program)); return () => {}; }
+  const u = {}; const n = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < n; i++) { const info = gl.getActiveUniform(program, i); if (info) u[info.name] = gl.getUniformLocation(program, info.name); }
+
+  const S = { radius: 1.5, step: 1.5*2 + 14, from: toOklab(hexRgb('#5227FF')), to: toOklab(hexRgb('#FF9FFC')), glow: toOklab(hexRgb('#FFFFFF')), lensRadius: 240, strength: 0.6, twist: 0, glowRadius: 160, glowIntensity: 0.8, base: 0.55 };
+  const angle = 135 * Math.PI / 180, dir = [Math.sin(angle), -Math.cos(angle)];
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const vao = gl.createVertexArray(), buffer = gl.createBuffer();
+  gl.bindVertexArray(vao); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 16, 0); gl.vertexAttribDivisor(0, 1); gl.bindVertexArray(null);
+
+  const size = { width: 1, height: 1, ratio: 1 };
+  const pointer = { x: 0, y: 0, inside: false, down: false };
+  const lens = { x: 0, y: 0, vx: 0, vy: 0, presence: 0, zoom: 0, ready: false };
+  let layoutKey = '', count = 0, time = Math.random()*100, focus = reduced ? 1 : 0, raf = 0, last = 0, visible = true, alive = true;
+  const strengthOf = zoom => clamp(S.strength*1.2*(1 + zoom*0.6), -0.85, 1.45);
+
+  const resize = () => {
+    const rect = container.getBoundingClientRect();
+    const cw = Math.max(1, rect.width), ch = Math.max(1, rect.height);
+    const ratio = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (cw*ch)));
+    const w = Math.max(1, Math.round(cw*ratio)), h = Math.max(1, Math.round(ch*ratio));
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    size.width = cw; size.height = ch; size.ratio = w / cw;
+    const margin = Math.ceil(lensReach(S.lensRadius, strengthOf(1), 0) + 10 + S.step*2);
+    const step = Math.max(S.step, Math.sqrt((cw + margin*2)*(ch + margin*2) / MAX_DOTS));
+    const key = cw + '|' + ch + '|' + step;
+    if (key !== layoutKey) { layoutKey = key; const data = buildDots(cw, ch, step, margin); count = data.length/4; gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW); }
+  };
+
+  const frame = now => {
+    raf = 0; if (!alive) return;
+    const dt = clamp((now - last)/1000 || 0, 0, 0.05); last = Math.max(last, now);
+    const waveAmp = wavesOn() ? 8 : 0, sparkle = wavesOn() ? 1 : 0;
+    if (!reduced) time += dt;
+    if (focus < 1) focus = Math.min(1, focus + dt/1.8);
+    const tracking = pointer.inside;
+    if (tracking && (!lens.ready || lens.presence < 0.01)) { lens.x = pointer.x; lens.y = pointer.y; lens.vx = 0; lens.vy = 0; lens.ready = true; }
+    if (lens.ready) {
+      const om = 18, f = 1 + 2*dt*om, hoo = dt*om*om, hhoo = dt*hoo, inv = 1/(f + hhoo);
+      const nx = (f*lens.x + dt*lens.vx + hhoo*pointer.x)*inv, ny = (f*lens.y + dt*lens.vy + hhoo*pointer.y)*inv;
+      lens.vx = (lens.vx + hoo*(pointer.x - lens.x))*inv; lens.vy = (lens.vy + hoo*(pointer.y - lens.y))*inv; lens.x = nx; lens.y = ny;
+    }
+    const pT = tracking ? 1 : 0; lens.presence += (pT - lens.presence)*(1 - Math.exp(-dt/(tracking ? 0.18 : 0.4)));
+    const zT = tracking && pointer.down ? 1 : 0; lens.zoom += (zT - lens.zoom)*(1 - Math.exp(-dt/0.14));
+    const eased = focus < 0.5 ? 4*focus*focus*focus : 1 - Math.pow(-2*focus + 2, 3)/2;
+    const presence = lens.presence*lens.presence*(3 - 2*lens.presence);
+    const extent = Math.abs(size.width*dir[0]) + Math.abs(size.height*dir[1]);
+    gl.viewport(0, 0, canvas.width, canvas.height); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); gl.useProgram(program); gl.bindVertexArray(vao);
+    gl.uniform2f(u.uSize, size.width, size.height); gl.uniform1f(u.uPixel, size.ratio); gl.uniform1f(u.uRadius, S.radius); gl.uniform1f(u.uCell, S.step);
+    gl.uniform4f(u.uLens, lens.x, lens.y, S.lensRadius*(1 + lens.zoom*0.12), presence);
+    gl.uniform2f(u.uWarp, strengthOf(lens.zoom), 0);
+    gl.uniform3f(u.uGlow, S.glowRadius*(1 + lens.zoom*0.1), S.glowIntensity*(1 + lens.zoom*0.25), 1);
+    gl.uniform3f(u.uFrom, S.from[0], S.from[1], S.from[2]); gl.uniform3f(u.uTo, S.to[0], S.to[1], S.to[2]);
+    gl.uniform4f(u.uGlowColor, S.glow[0], S.glow[1], S.glow[2], 1);
+    gl.uniform3f(u.uGradient, dir[0], dir[1], Math.max(extent, 1));
+    gl.uniform1f(u.uTime, time); gl.uniform1f(u.uWave, waveAmp); gl.uniform1f(u.uSparkle, sparkle);
+    gl.uniform1f(u.uFocus, eased); gl.uniform1f(u.uBase, S.base); gl.uniform1f(u.uOpacity, 1);
+    if (count) gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, count);
+    const moving = Math.abs(pointer.x - lens.x) + Math.abs(pointer.y - lens.y) > 0.05 || Math.hypot(lens.vx, lens.vy) > 0.5;
+    const settling = Math.abs(pT - lens.presence) > 0.002 || Math.abs(zT - lens.zoom) > 0.002 || (lens.presence > 0.002 && moving);
+    const animated = !reduced && waveAmp > 0;
+    if ((focus < 1 || settling || animated) && visible && document.visibilityState !== 'hidden') raf = requestAnimationFrame(frame);
+  };
+  const wake = () => { if (raf || !alive || !visible || document.visibilityState === 'hidden') return; last = performance.now(); raf = requestAnimationFrame(frame); };
+
+  const locate = e => { const r = container.getBoundingClientRect(); pointer.x = e.clientX - r.left; pointer.y = e.clientY - r.top; pointer.inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom; };
+  const onMove = e => { locate(e); wake(); };
+  const onDown = e => { locate(e); pointer.down = pointer.inside; wake(); };
+  const onUp = e => { pointer.down = false; if (e.pointerType !== 'mouse') pointer.inside = false; wake(); };
+  const onLeave = () => { pointer.inside = false; pointer.down = false; wake(); };
+  const onVis = () => wake();
+  window.addEventListener('pointermove', onMove, { passive: true });
+  window.addEventListener('pointerdown', onDown, { passive: true });
+  window.addEventListener('pointerup', onUp, { passive: true });
+  window.addEventListener('pointercancel', onUp, { passive: true });
+  document.documentElement.addEventListener('pointerleave', onLeave);
+  document.addEventListener('visibilitychange', onVis);
+  const ro = new ResizeObserver(() => { resize(); wake(); }); ro.observe(container);
+  const io = new IntersectionObserver(es => { visible = es.some(e => e.isIntersecting); wake(); }); io.observe(container);
+  resize(); wake();
+
+  return () => {
+    alive = false; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect();
+    window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerdown', onDown);
+    window.removeEventListener('pointerup', onUp); window.removeEventListener('pointercancel', onUp);
+    document.documentElement.removeEventListener('pointerleave', onLeave); document.removeEventListener('visibilitychange', onVis);
+    if (!gl.isContextLost()) { gl.deleteBuffer(buffer); gl.deleteVertexArray(vao); gl.deleteProgram(program); }
+  };
+}
+</script>
+</body>
+</html>
+
